@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Group } from '@components/Group'
 import { HomeHeader } from '@components/HomeHeader'
-import { Center, Text, VStack, FlatList } from 'native-base'
+import { Center, Text, VStack, FlatList, HStack, Heading } from 'native-base'
 
 export function Home() {
     const [groups, setGroups] = useState(['costa', 'bíceps', 'tríceps', 'ombro'])
@@ -21,11 +21,20 @@ export function Home() {
                     />}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                _contentContainerStyle={{px:8}}
+                _contentContainerStyle={{ px: 8 }}
                 my={10}
                 maxH={10}
-
             />
+            <VStack flex={1} px={8} mb={5}>
+                <HStack justifyContent='space-between'>
+                    <Heading color='gray.200' fontSize='md'>
+                        Exercício
+                    </Heading>
+                    <Text color='gray.200' fontSize='sm'>
+                        4
+                    </Text>
+                </HStack>
+            </VStack>
 
 
         </VStack>
