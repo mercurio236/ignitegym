@@ -12,10 +12,10 @@ import { Profile } from '@screens/Profile';
 import { History } from '@screens/History';
 
 type AppRoutes = {
-    home:undefined;
-    exercise:undefined;
-    profile:undefined;
-    history:undefined
+    home: undefined;
+    exercise: undefined;
+    profile: undefined;
+    history: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -24,16 +24,23 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 
 export function AppRoutes() {
-    const {sizes} = useTheme()
+    const { sizes, colors } = useTheme()
+
     const iconsSize = sizes[6]
+
     return (
-        <Navigator screenOptions={{headerShown:false, tabBarShowLabel:false}}>
+        <Navigator screenOptions={{ 
+            headerShown: false, 
+            tabBarShowLabel: false, 
+            tabBarActiveTintColor: colors.green[500],
+            tabBarInactiveTintColor: colors.gray[200]
+            }}>
             <Screen
                 name='home'
                 component={Home}
                 options={{
-                    tabBarIcon: ({color}) => (
-                        <HomeSvg fill={color} width={iconsSize} height={iconsSize}/>
+                    tabBarIcon: ({ color }) => (
+                        <HomeSvg fill={color} width={iconsSize} height={iconsSize} />
                     )
                 }}
             />
@@ -41,8 +48,8 @@ export function AppRoutes() {
                 name='history'
                 component={History}
                 options={{
-                    tabBarIcon: ({color}) => (
-                        <HistorySvg fill={color} width={iconsSize} height={iconsSize}/>
+                    tabBarIcon: ({ color }) => (
+                        <HistorySvg fill={color} width={iconsSize} height={iconsSize} />
                     )
                 }}
             />
@@ -50,8 +57,8 @@ export function AppRoutes() {
                 name='profile'
                 component={Profile}
                 options={{
-                    tabBarIcon: ({color}) => (
-                        <ProfileSvg fill={color} width={iconsSize} height={iconsSize}/>
+                    tabBarIcon: ({ color }) => (
+                        <ProfileSvg fill={color} width={iconsSize} height={iconsSize} />
                     )
                 }}
             />
