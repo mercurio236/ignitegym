@@ -21,7 +21,7 @@ export function Home() {
                 renderItem={({ item }) =>
                     <Group
                         name={item}
-                        isActive={groupSelected === item}
+                        isActive={groupSelected.toLocaleUpperCase() === item.toLocaleUpperCase()}
                         onPress={() => setGroupSelected(item)}
                     />}
                 horizontal
@@ -30,6 +30,7 @@ export function Home() {
                 my={10}
                 maxH={10}
             />
+
             <VStack flex={1} px={8} mb={5}>
                 <HStack justifyContent='space-between'>
                     <Heading color='gray.200' fontSize='md'>
@@ -39,6 +40,7 @@ export function Home() {
                         {exercises.length}
                     </Text>
                 </HStack>
+
                 <FlatList
                     data={exercises}
                     keyExtractor={item => item}
