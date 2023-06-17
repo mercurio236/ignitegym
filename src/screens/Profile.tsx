@@ -16,7 +16,7 @@ export function Profile() {
     return (
         <VStack flex={1}>
             <ScreenHeader title='Perfil' />
-            <ScrollView>
+            <ScrollView contentContainerStyle={{paddingBottom:36}}>
                 <Center mt={6} px={10}>
                     {
                         photoIsLoading ?
@@ -77,8 +77,8 @@ export function Profile() {
                     />
 
                     <Button
-                    title='Atualizar'
-                    mt={4}
+                        title='Atualizar'
+                        mt={4}
                     />
 
                 </VStack>
