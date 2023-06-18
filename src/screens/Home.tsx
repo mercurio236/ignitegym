@@ -37,11 +37,12 @@ export function Home() {
                 _contentContainerStyle={{ px: 8 }}
                 my={10}
                 maxH={10}
+                minH={10}
             />
 
             <VStack flex={1} px={8} mb={5}>
                 <HStack justifyContent='space-between'>
-                    <Heading color='gray.200' fontSize='md'>
+                    <Heading color='gray.200' fontSize='md' mb={5}>
                         Exercício
                     </Heading>
                     <Text color='gray.200' fontSize='sm'>
