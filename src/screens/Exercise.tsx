@@ -1,4 +1,4 @@
-import { Center, HStack, Heading, Icon, Text, VStack } from 'native-base'
+import { Center, HStack, Heading, Icon, Text, VStack, Image } from 'native-base'
 import { TouchableOpacity } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -31,12 +31,25 @@ export function Exercise() {
                     </Heading>
 
                     <HStack alignItems='center'>
-                        <BodySvg/>
+                        <BodySvg />
                         <Text color='gray.200' ml={1} textTransform='capitalize'>
                             Costas
                         </Text>
                     </HStack>
                 </HStack>
+            </VStack>
+
+            <VStack p={8}>
+                <Image
+                    w='full'
+                    h={80}
+                    source={{ uri: 'https://conteudo.imguol.com.br/c/entretenimento/0c/2019/12/03/remada-unilateral-com-halteres-1575402100538_v2_600x600.jpg' }}
+                    alt='Nome do exercício'
+                    mb={3}
+                    resizeMode='cover'
+                    rounded='lg'
+                    
+                />
             </VStack>
         </VStack>
     )
