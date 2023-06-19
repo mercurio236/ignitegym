@@ -36,14 +36,16 @@ export function Profile() {
             if (photoSelected.assets[0].uri) {
                 const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
 
-              if(photoInfo.size && (photoInfo.size / 1024 / 1024) > 5  ){
-               return toast.show({
-                title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
-                placement:'top',
-                bgColor:'red.500'
-               }) 
-               
-              }
+                if (photoInfo.exists) {
+                    if (photoInfo.size && (photoInfo.size / 1024 / 1024) > 5) {
+                        return toast.show({
+                            title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
+                            placement: 'top',
+                            bgColor: 'red.500'
+                        })
+
+                    }
+                }
 
                 setUserPhoto(photoSelected.assets[0].uri)
             }
