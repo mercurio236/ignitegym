@@ -20,7 +20,14 @@ type FormDataProps = {
 
 export function SignUp() {
 
-    const { control, handleSubmit } = useForm<FormDataProps>()
+    const { control, handleSubmit } = useForm<FormDataProps>({
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            password_confirm: ''
+        }
+    })
 
     const navigation = useNavigation()
     function handleGoBack() {
@@ -55,6 +62,7 @@ export function SignUp() {
                     <Controller
                         control={control}
                         name='name'
+
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder='Nome'
