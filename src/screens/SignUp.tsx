@@ -7,19 +7,27 @@ import { AuthNavigationRoutesProps } from '@routes/auth.routes'
 
 import BackgroundImgs from '@assets/background.png'
 import LogoSvg from '@assets/logo.svg'
+
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 
+type FormDataProps = {
+    name: string;
+    email: string;
+    password: string;
+    password_confirm: string;
+}
+
 export function SignUp() {
 
-    const { control, handleSubmit } = useForm()
+    const { control, handleSubmit } = useForm<FormDataProps>()
 
     const navigation = useNavigation()
     function handleGoBack() {
         navigation.goBack()
     }
 
-    function handleSignUp(data: any) {
+    function handleSignUp(data: FormDataProps) {
         console.log(data)
     }
 
@@ -84,7 +92,7 @@ export function SignUp() {
 
                     <Controller
                         control={control}
-                        name='passwordConfirm'
+                        name='password_confirm'
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder='Confirme a senha'
