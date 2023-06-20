@@ -1,5 +1,7 @@
 import { VStack, Image, Text, Center, Heading, ScrollView } from 'native-base'
 import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -18,6 +20,12 @@ type FormDataProps = {
     password_confirm: string;
 }
 
+const signUpSchema = yup.object({
+    name: yup.string().required('Informa o nome'),
+    email: yup.string().required('Informa o e-mail').email('E-mail invalido.'),
+    password: yup.string().required('Informa a senha').min(6,'A senha deve ter pelo menos 6 dígitos')
+})
+
 export function SignUp() {
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
@@ -26,7 +34,8 @@ export function SignUp() {
             email: '',
             password: '',
             password_confirm: ''
-        }
+        },
+        resolver: yupResolver(signUpSchema)
     })
 
     const navigation = useNavigation()
@@ -62,9 +71,6 @@ export function SignUp() {
                     <Controller
                         control={control}
                         name='name'
-                        rules={{
-                            required: 'Informe o nome'
-                        }}
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder='Nome'
@@ -78,13 +84,6 @@ export function SignUp() {
                     <Controller
                         control={control}
                         name='email'
-                        rules={{
-                            required: 'Informe o email',
-                            pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: 'E-mail inválido'
-                            }
-                        }}
                         render={({ field: { onChange, value } }) => (
                             <Input
                                 placeholder='E-mail'
@@ -107,6 +106,7 @@ export function SignUp() {
                                 secureTextEntry
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.password?.message}
                             />
                         )}
                     />
