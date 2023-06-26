@@ -14,6 +14,7 @@ import { Button } from '@components/Button'
 import { AppError } from '@utils/AppError'
 import { api } from '@services/api'
 import { ExerciseDTO } from '@dtos/ExerciseDTO'
+import { Loading } from '@components/Loading'
 
 type RouteParamsProps = {
     exerciseId: string;
@@ -21,6 +22,7 @@ type RouteParamsProps = {
 
 
 export function Exercise() {
+    const [isLoading, setIsLoading] = useState(true)
     const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
 
     const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -35,6 +37,7 @@ export function Exercise() {
 
     async function fetchExerciseDetails() {
         try {
+            setIsLoading(true)
             const res = await api.get(`/exercises/${exerciseId}`)
             setExercise(res.data)
         } catch (error) {
@@ -46,6 +49,8 @@ export function Exercise() {
                 bgColor: 'red.500'
             })
 
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -80,39 +85,42 @@ export function Exercise() {
                 </HStack>
             </VStack>
             <ScrollView>
-                <VStack p={8}>
-                    <Box mb={3} rounded='lg' overflow='hidden'>
-                        <Image
-                            w='full'
-                            h={80}
-                            source={{ uri: `${api.defaults.baseURL}/exercise/demo/${exercise.demo}` }}
-                            alt='Nome do exercício'
-                            resizeMode='cover'
-                            rounded='lg'
-                        />
-                    </Box>
+                {
+                    isLoading ? <Loading /> :
+                        <VStack p={8}>
+                            <Box mb={3} rounded='lg' overflow='hidden'>
+                                <Image
+                                    w='full'
+                                    h={80}
+                                    source={{ uri: `${api.defaults.baseURL}/exercise/demo/${exercise.demo}` }}
+                                    alt='Nome do exercício'
+                                    resizeMode='cover'
+                                    rounded='lg'
+                                />
+                            </Box>
 
-                    <Box bg='gray.600' pb={4} px={4}>
-                        <HStack alignItems='center' justifyContent='space-around' mb={6} mt={5}>
-                            <HStack>
-                                <SeriesSvg />
-                                <Text color='gray.200' ml='2'>
-                                    {exercise.series} séries
-                                </Text>
-                            </HStack>
-                            <HStack>
-                                <RepetitionsSvg />
-                                <Text color='gray.200' ml='2'>
-                                    {exercise.repetitions} repetições
-                                </Text>
-                            </HStack>
-                        </HStack>
+                            <Box bg='gray.600' pb={4} px={4}>
+                                <HStack alignItems='center' justifyContent='space-around' mb={6} mt={5}>
+                                    <HStack>
+                                        <SeriesSvg />
+                                        <Text color='gray.200' ml='2'>
+                                            {exercise.series} séries
+                                        </Text>
+                                    </HStack>
+                                    <HStack>
+                                        <RepetitionsSvg />
+                                        <Text color='gray.200' ml='2'>
+                                            {exercise.repetitions} repetições
+                                        </Text>
+                                    </HStack>
+                                </HStack>
 
-                        <Button
-                            title='Marcar como realizado'
-                        />
-                    </Box>
-                </VStack>
+                                <Button
+                                    title='Marcar como realizado'
+                                />
+                            </Box>
+                        </VStack>
+                }
             </ScrollView>
         </VStack>
     )
