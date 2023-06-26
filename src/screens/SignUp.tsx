@@ -41,12 +41,7 @@ export function SignUp() {
     const toast = useToast()
 
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
-        defaultValues: {
-            name: '',
-            email: '',
-            password: '',
-            password_confirm: ''
-        },
+       
         resolver: yupResolver(signUpSchema)
     })
 
