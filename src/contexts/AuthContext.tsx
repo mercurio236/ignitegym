@@ -49,7 +49,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
             if (data.user && data.token) {
                 setIsLoadingUserStorageData(true)
-                await storageUserAndTokenSave(data.user, data.user)
+                await storageUserAndTokenSave(data.user, data.token)
 
                 userAndTokenUpdate(data.user, data.token)
             }
