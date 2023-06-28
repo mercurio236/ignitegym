@@ -13,6 +13,8 @@ import { UserPhoto } from '@components/UserPhoto'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { useAuth } from '@hooks/useAuth';
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
 
 const PHOTO_SIZE = 33;
 
@@ -29,18 +31,19 @@ const profileSchema = yup.object({
     email: yup.string(),
     password: yup.string().min(6, 'A senha deve ter pelo menos 6 dígitos').nullable().transform((value) => !!value ? value : null),
     confirm_password: yup
-    .string()
-    .nullable()
-    .transform((value) => !!value ? value : null)
-    .oneOf([yup.ref('password'), null], 'A confirmação de senha não confere')
-    .when('password', {
-        is: (val:any) => val !== null, 
-        then: (schema) => schema.nullable().required('Informe a confirmação da senha').transform((value) => !!value ? value : null),
-    }),
-    old_password: yup.string()
+        .string()
+        .nullable()
+        .transform((value) => !!value ? value : null)
+        .oneOf([yup.ref('password'), null], 'A confirmação de senha não confere')
+        .when('password', {
+            is: (val: any) => val !== null,
+            then: () => yup.string().nullable().transform((value) => !!value ? value : null)
+        }),
+    
 })
 
 export function Profile() {
+    const [isUpdate, setIsUpdate] = useState(false)
     const [photoIsLoading, setPhotoIsLoading] = useState(false)
     const [userPhoto, setUserPhoto] = useState('https://github.com/mercurio236.png')
 
@@ -96,7 +99,29 @@ export function Profile() {
     }
 
     async function handleProfileUpdate(data: FormDataProps) {
-        console.log(data)
+        try {
+            setIsUpdate(true)
+
+            await api.put('/users', data)
+
+            toast.show({
+                title: 'Perfil atualizado com sucesso',
+                placement: 'top',
+                bgColor: 'green.500'
+            })
+
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possivel atualizar dados. Tente novamente mais tarde'
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        } finally {
+            setIsUpdate(false)
+        }
     }
 
     return (
@@ -204,6 +229,7 @@ export function Profile() {
                         title='Atualizar'
                         mt={4}
                         onPress={handleSubmit(handleProfileUpdate)}
+                        isLoading={isUpdate}
                     />
 
                 </VStack>
