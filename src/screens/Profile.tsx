@@ -38,17 +38,19 @@ const profileSchema = yup.object({
         .transform((value) => !!value ? value : null)
         .oneOf([yup.ref('password')], 'A confirmação de senha não confere')
         .when('password', {
-            is: (val: string) => Boolean(val),
-            then: (schema) => schema.nullable().required('Informe a confirmação da senha').transform((value) => !!value ? value : null),
-
+            is: (Field: any) => Field,
+            then: (schema) =>
+                schema.nullable().required('Informe a confirmação da senha.').transform((value) => !!value ? value : null),
         }),
+    old_password: yup.string()
+
 
 })
 
 export function Profile() {
     const [isUpdate, setIsUpdate] = useState(false)
     const [photoIsLoading, setPhotoIsLoading] = useState(false)
-    
+
 
     const toast = useToast()
     const { user, updateUserProfile } = useAuth()
@@ -92,7 +94,7 @@ export function Profile() {
                 const fileExtension = photoSelected.assets[0].uri.split('.').pop();
 
                 const photoFile = {
-                    name: `${user.name}.${fileExtension}`.toLowerCase().replace(' ',''),
+                    name: `${user.name}.${fileExtension}`.toLowerCase().replace(' ', ''),
                     uri: photoSelected.assets[0].uri,
                     type: `${photoSelected.assets[0].type}/${fileExtension}`
                 } as any
@@ -101,9 +103,9 @@ export function Profile() {
                 const userPhotoUploadForm = new FormData()
                 userPhotoUploadForm.append('avatar', photoFile)
 
-              const avatarUpdatedResponse = await api.patch('/users/avatar', userPhotoUploadForm, {
+                const avatarUpdatedResponse = await api.patch('/users/avatar', userPhotoUploadForm, {
                     headers: {
-                        'Content-Type':'multipart/form-data'
+                        'Content-Type': 'multipart/form-data'
                     }
                 })
 
@@ -112,9 +114,9 @@ export function Profile() {
                 updateUserProfile(userUpdated)
 
                 toast.show({
-                    title:'Foto Atualizada',
-                    placement:'top',
-                    bgColor:'green.500'
+                    title: 'Foto Atualizada',
+                    placement: 'top',
+                    bgColor: 'green.500'
                 })
 
             }
@@ -181,7 +183,7 @@ export function Profile() {
                                 endColor='gray.400'
                             /> :
                             <UserPhoto
-                            source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUsetPhotoImg}
+                                source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUsetPhotoImg}
                                 alt='Foto do usuário'
                                 size={PHOTO_SIZE}
                             />
