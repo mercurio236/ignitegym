@@ -7,6 +7,8 @@ import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system';
 import * as yup from 'yup'
 
+import defaultUsetPhotoImg from '@assets/userPhotoDefault.png'
+
 
 import { ScreenHeader } from '@components/ScreenHeader'
 import { UserPhoto } from '@components/UserPhoto'
@@ -46,7 +48,7 @@ const profileSchema = yup.object({
 export function Profile() {
     const [isUpdate, setIsUpdate] = useState(false)
     const [photoIsLoading, setPhotoIsLoading] = useState(false)
-    const [userPhoto, setUserPhoto] = useState('https://github.com/mercurio236.png')
+    
 
     const toast = useToast()
     const { user, updateUserProfile } = useAuth()
@@ -99,11 +101,15 @@ export function Profile() {
                 const userPhotoUploadForm = new FormData()
                 userPhotoUploadForm.append('avatar', photoFile)
 
-                await api.patch('/users/avatar', userPhotoUploadForm, {
+              const avatarUpdatedResponse = await api.patch('/users/avatar', userPhotoUploadForm, {
                     headers: {
                         'Content-Type':'multipart/form-data'
                     }
                 })
+
+                const userUpdated = user;
+                userUpdated.avatar = avatarUpdatedResponse.data.avatar
+                updateUserProfile(userUpdated)
 
                 toast.show({
                     title:'Foto Atualizada',
@@ -175,7 +181,7 @@ export function Profile() {
                                 endColor='gray.400'
                             /> :
                             <UserPhoto
-                                source={{ uri: userPhoto }}
+                            source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUsetPhotoImg}
                                 alt='Foto do usuário'
                                 size={PHOTO_SIZE}
                             />
