@@ -90,14 +90,38 @@ export function Profile() {
                 const fileExtension = photoSelected.assets[0].uri.split('.').pop();
 
                 const photoFile = {
-                    name: `${user.name}.${fileExtension}`.toLowerCase(),
+                    name: `${user.name}.${fileExtension}`.toLowerCase().replace(' ',''),
                     uri: photoSelected.assets[0].uri,
-                    tipo: `${photoSelected.assets[0].type}/${fileExtension}`
-                }
+                    type: `${photoSelected.assets[0].type}/${fileExtension}`
+                } as any
+
+
+                const userPhotoUploadForm = new FormData()
+                userPhotoUploadForm.append('avatar', photoFile)
+
+                await api.patch('/users/avatar', userPhotoUploadForm, {
+                    headers: {
+                        'Content-Type':'multipart/form-data'
+                    }
+                })
+
+                toast.show({
+                    title:'Foto Atualizada',
+                    placement:'top',
+                    bgColor:'green.500'
+                })
+
             }
 
         } catch (error) {
-            console.log(error)
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possivel atualizar dados. Tente novamente mais tarde'
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
         } finally {
             setPhotoIsLoading(false)
         }
