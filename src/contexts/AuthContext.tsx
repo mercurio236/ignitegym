@@ -9,7 +9,7 @@ import { UserDTO } from "@dtos/UserDTO";
 export type AuthContextDataProps = {
     user: UserDTO;
     SignIn: (email: string, password: string) => Promise<void>;
-    updateUserProfile:(serUpdated:UserDTO) => Promise<void>;
+    updateUserProfile: (serUpdated: UserDTO) => Promise<void>;
     isLoadingUserStorageData: boolean;
     signOut: () => Promise<void>
 }
@@ -106,6 +106,14 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     useEffect(() => {
         loadUserData()
     }, [])
+
+    useEffect(() => {
+        const subScribe = api.registerInterceptTokenManager(signOut)
+
+        return () => {
+            subScribe()
+        }
+    }, [signOut])
 
     return (
         <AuthContext.Provider value={{ user, SignIn, isLoadingUserStorageData, signOut, updateUserProfile }}>
